@@ -24,13 +24,14 @@ var reservations= [{
 	id:"20"
 }];
 
+var waiting= [{}];
 //Basic route that sends the suer to the AJAX page
 // ==================================================================
 app.get("/",function(req, res) {
 	res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/table", function(req, res) {
+app.get("/tables", function(req, res) {
 	res.sendFile(path.join(__dirname, "tables.html"));
 });
 
@@ -38,15 +39,23 @@ app.get("/reservations", function(req, res) {
 	res.sendFile(path.join(__dirname, "reservations.html"));
 });
 
+
+app.get("/api/:reservation?", function(req, res) {
+	var chosen = req.params.reservation;
+	if (chosen === "waiting") {
+		return res.json(waiting);
+	} else return res.json(reservations);
+});
+
 //Create new reservations 
-app.post("/add", function(req, res) {
+app.post("/api/tables", function(req, res) {
 	var newRes = req.body;
 
 	console.log(newRes);
 
+	res.json(newRes);
 	reservations.push(newRes);
 
-	res.json(newRes);
 });
 
 // Start the new server to begin listening
